@@ -1,0 +1,493 @@
+<title>Cobertura de Productos</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@500;600;700;800&family=Public+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<style>
+  :root{
+    --bg:#f5f7f6;
+    --surface:#ffffff;
+    --surface-2:#eef1f0;
+    --ink:#161f1c;
+    --muted:#57655f;
+    --faint:#8b9a93;
+    --line:#dde4e0;
+    --accent:#0e7c66;
+    --accent-ink:#053d32;
+    --accent-soft:#e2f2ec;
+    --norte:#c1741f;
+    --norte-soft:#f8ead5;
+    --centro:#0e7c66;
+    --centro-soft:#deeee8;
+    --sur:#33628a;
+    --sur-soft:#dfe8f0;
+    --austral:#5a5390;
+    --austral-soft:#e6e3f3;
+    --good:#1f8a55;
+    --good-soft:#e1f2e7;
+    --warn:#b8791a;
+    --warn-soft:#f8ecd6;
+    --crit:#a23b3b;
+    --crit-soft:#f6e2e0;
+    --shadow: 0 1px 2px rgba(20,30,26,0.05), 0 8px 24px -16px rgba(20,30,26,0.25);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#111613;
+      --surface:#171e1a;
+      --surface-2:#1e2622;
+      --ink:#eaf1ec;
+      --muted:#a6b5ae;
+      --faint:#6d7b74;
+      --line:#2a332e;
+      --accent:#3fb894;
+      --accent-ink:#c9f0e2;
+      --accent-soft:#173129;
+      --norte:#e0a25a;
+      --norte-soft:#33280f;
+      --centro:#3fb894;
+      --centro-soft:#123027;
+      --sur:#7fa6cc;
+      --sur-soft:#182838;
+      --austral:#a79fe0;
+      --austral-soft:#241f3d;
+      --good:#57c98a;
+      --good-soft:#12291c;
+      --warn:#e0ab53;
+      --warn-soft:#332510;
+      --crit:#e2837c;
+      --crit-soft:#361c19;
+      --shadow: 0 1px 2px rgba(0,0,0,0.4), 0 8px 28px -16px rgba(0,0,0,0.6);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#111613;
+    --surface:#171e1a;
+    --surface-2:#1e2622;
+    --ink:#eaf1ec;
+    --muted:#a6b5ae;
+    --faint:#6d7b74;
+    --line:#2a332e;
+    --accent:#3fb894;
+    --accent-ink:#c9f0e2;
+    --accent-soft:#173129;
+    --norte:#e0a25a;
+    --norte-soft:#33280f;
+    --centro:#3fb894;
+    --centro-soft:#123027;
+    --sur:#7fa6cc;
+    --sur-soft:#182838;
+    --austral:#a79fe0;
+    --austral-soft:#241f3d;
+    --good:#57c98a;
+    --good-soft:#12291c;
+    --warn:#e0ab53;
+    --warn-soft:#332510;
+    --crit:#e2837c;
+    --crit-soft:#361c19;
+    --shadow: 0 1px 2px rgba(0,0,0,0.4), 0 8px 28px -16px rgba(0,0,0,0.6);
+  }
+
+  *{box-sizing:border-box;}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:"Public Sans", -apple-system, "Segoe UI", sans-serif;
+    padding-inline:20px;
+    padding-block:24px;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:1180px;margin-inline:auto;display:flex;flex-direction:column;gap:22px;}
+
+  header.top{display:flex;flex-direction:column;gap:4px;}
+  .eyebrow{
+    font-family:"IBM Plex Mono", monospace;
+    font-size:12px;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    color:var(--accent);
+    font-weight:600;
+  }
+  h1{
+    font-family:"Libre Franklin", sans-serif;
+    font-weight:800;
+    font-size:clamp(22px,3.4vw,30px);
+    margin:0;
+    letter-spacing:-0.01em;
+    text-wrap:balance;
+  }
+  .sub{color:var(--muted);font-size:14px;max-width:65ch;}
+
+  /* summary tiles */
+  .tiles{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+    gap:10px;
+  }
+  .tile{
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:14px 16px;
+    display:flex;
+    flex-direction:column;
+    gap:2px;
+    box-shadow:var(--shadow);
+  }
+  .tile .n{
+    font-family:"IBM Plex Mono", monospace;
+    font-variant-numeric:tabular-nums;
+    font-size:26px;
+    font-weight:600;
+    color:var(--ink);
+    line-height:1.1;
+  }
+  .tile .l{font-size:12.5px;color:var(--muted);}
+  .tile.accent .n{color:var(--accent-ink);}
+  .tile.accent{background:var(--accent-soft);border-color:transparent;}
+
+  /* controls */
+  .controls{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    align-items:center;
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:10px 12px;
+    box-shadow:var(--shadow);
+  }
+  .search{
+    flex:1 1 200px;
+    min-width:160px;
+    display:flex;
+    align-items:center;
+    gap:8px;
+    background:var(--surface-2);
+    border:1px solid var(--line);
+    border-radius:8px;
+    padding:7px 10px;
+  }
+  .search svg{flex:none;opacity:.6;}
+  .search input{
+    border:none;
+    background:transparent;
+    outline:none;
+    color:var(--ink);
+    font-family:"Public Sans",sans-serif;
+    font-size:13.5px;
+    width:100%;
+  }
+  .search input::placeholder{color:var(--faint);}
+  .chip-row{display:flex;flex-wrap:wrap;gap:6px;}
+  button.chip{
+    font-family:"Public Sans",sans-serif;
+    font-size:12.5px;
+    font-weight:600;
+    border-radius:999px;
+    border:1px solid var(--line);
+    background:var(--surface);
+    color:var(--muted);
+    padding:6px 12px;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    gap:6px;
+    transition:background .12s ease, color .12s ease, border-color .12s ease;
+  }
+  button.chip:hover{border-color:var(--faint);}
+  button.chip[aria-pressed="true"]{
+    background:var(--ink);
+    color:var(--bg);
+    border-color:var(--ink);
+  }
+  button.chip .dot{width:7px;height:7px;border-radius:50%;background:currentColor;}
+
+  /* region section */
+  .region{
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:12px;
+    overflow:hidden;
+    box-shadow:var(--shadow);
+  }
+  .region-head{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:12px 16px;
+    cursor:pointer;
+    user-select:none;
+    background:var(--surface-2);
+    border-bottom:1px solid var(--line);
+  }
+  .region-head .bar{width:4px;align-self:stretch;border-radius:2px;min-height:20px;}
+  .region-head h2{
+    font-family:"Libre Franklin",sans-serif;
+    font-size:15.5px;
+    font-weight:700;
+    margin:0;
+    flex:none;
+  }
+  .region-head .count{
+    font-family:"IBM Plex Mono",monospace;
+    font-size:12px;
+    color:var(--muted);
+    background:var(--surface);
+    border:1px solid var(--line);
+    padding:2px 8px;
+    border-radius:999px;
+  }
+  .region-head .products-mini{
+    display:flex;
+    gap:5px;
+    margin-left:auto;
+    font-family:"IBM Plex Mono",monospace;
+    font-size:11px;
+    color:var(--muted);
+  }
+  .region-head .caret{transition:transform .15s ease;color:var(--faint);flex:none;}
+  .region.collapsed .caret{transform:rotate(-90deg);}
+  .region.collapsed .rows{display:none;}
+
+  .rows{display:flex;flex-direction:column;}
+  .row{
+    display:grid;
+    grid-template-columns:1.6fr auto auto;
+    gap:10px 14px;
+    align-items:center;
+    padding:10px 16px;
+    border-bottom:1px solid var(--line);
+  }
+  .row:last-child{border-bottom:none;}
+  .row:hover{background:var(--surface-2);}
+  .row .hname{
+    font-size:13.8px;
+    font-weight:600;
+    color:var(--ink);
+    text-decoration:none;
+  }
+  .row .hname:hover{color:var(--accent-ink);text-decoration:underline;}
+  .row .products{display:flex;flex-wrap:wrap;gap:5px;justify-self:start;}
+  .badge{
+    font-family:"IBM Plex Mono",monospace;
+    font-size:10.5px;
+    font-weight:600;
+    letter-spacing:.01em;
+    padding:3px 7px;
+    border-radius:5px;
+    white-space:nowrap;
+    display:inline-flex;
+    align-items:center;
+    gap:4px;
+  }
+  .badge.smartlab{background:var(--centro-soft);color:var(--centro);}
+  .badge.labstats{background:var(--sur-soft);color:var(--sur);}
+  .badge.recordlabs{background:var(--austral-soft);color:var(--austral);}
+  .badge.consulta-web{background:var(--norte-soft);color:var(--norte);}
+
+  .status-pill{
+    font-size:11.5px;
+    font-weight:600;
+    padding:3px 9px;
+    border-radius:999px;
+    white-space:nowrap;
+    justify-self:end;
+  }
+  .status-pill.activo{background:var(--good-soft);color:var(--good);}
+  .status-pill.implementacion{background:var(--warn-soft);color:var(--warn);}
+  .status-pill.migracion{background:var(--crit-soft);color:var(--crit);}
+
+  .empty{padding:22px 16px;color:var(--faint);font-size:13px;text-align:center;}
+
+  footer{
+    color:var(--faint);
+    font-size:11.5px;
+    text-align:center;
+    padding-block:6px 2px;
+    font-family:"IBM Plex Mono",monospace;
+  }
+
+  @media (max-width:640px){
+    .row{grid-template-columns:1fr;justify-items:start;}
+    .status-pill{justify-self:start;}
+    .region-head .products-mini{display:none;}
+  }
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <span class="eyebrow">Instalaciones &middot; Red de laboratorios clínicos</span>
+    <h1>Cobertura de productos por hospital</h1>
+    <p class="sub">Estado de despliegue de SmartLab, Labstats, RecordLabs y Consulta Web en la red de hospitales, agrupado por región. Datos reflejan el último estado de la lista "Productos Instalados".</p>
+  </header>
+
+  <div class="tiles" id="tiles"></div>
+
+  <div class="controls">
+    <div class="search">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+      <input id="q" type="text" placeholder="Buscar hospital…" autocomplete="off">
+    </div>
+    <div class="chip-row" id="product-filters"></div>
+  </div>
+
+  <div id="regions"></div>
+
+  <footer>Panel generado a partir de la lista ClickUp "Productos Instalados (Pruebas Victor)" · 50 hospitales</footer>
+</div>
+
+<script>
+  const DATA = [
+    {name:"Hospital Alto Hospicio", region:"Norte", status:"activo", products:["smartlab","labstats","consulta-web"], url:"https://app.clickup.com/t/86bbzgf3u"},
+    {name:"Hospital Iquique HETG", region:"Norte", status:"activo", products:["labstats","consulta-web","smartlab"], url:"https://app.clickup.com/t/86bbzgf4w"},
+    {name:"Hospital Marcos Macuada (Tocopilla)", region:"Norte", status:"implementacion", products:["labstats"], url:"https://app.clickup.com/t/86bbzgfxf"},
+    {name:"Hospital Juan Noé (Arica)", region:"Norte", status:"implementacion", products:["labstats"], url:"https://app.clickup.com/t/86bbzgg02"},
+    {name:"CON Antofagasta", region:"Norte", status:"implementacion", products:["labstats"], url:"https://app.clickup.com/t/86bbzgg0w"},
+    {name:"Sermus Arica", region:"Norte", status:"implementacion", products:["labstats"], url:"https://app.clickup.com/t/86bbzgg6w"},
+    {name:"Hospital La Serena", region:"Norte", status:"activo", products:["labstats","smartlab"], url:"https://app.clickup.com/t/86bbzgggy"},
+    {name:"Hospital de Copiapó", region:"Norte", status:"implementacion", products:["labstats"], url:"https://app.clickup.com/t/86bbzggut"},
+
+    {name:"Hospital El Carmen de Maipú", region:"Centro", status:"activo", products:["labstats","smartlab","consulta-web"], url:"https://app.clickup.com/t/86bbzgf2p"},
+    {name:"Hospital San Francisco (SS Aconcagua)", region:"Centro", status:"implementacion", products:["labstats"], url:"https://app.clickup.com/t/86bbzgf69"},
+    {name:"Hospital San Camilo (SS Aconcagua)", region:"Centro", status:"implementacion", products:["labstats"], url:"https://app.clickup.com/t/86bbzgf79"},
+    {name:"Hospital San Juan (SS Aconcagua)", region:"Centro", status:"implementacion", products:["labstats"], url:"https://app.clickup.com/t/86bbzgf8q"},
+    {name:"CESFAM San Felipe (SS Aconcagua)", region:"Centro", status:"implementacion", products:["labstats"], url:"https://app.clickup.com/t/86bbzgf9k"},
+    {name:"Hospital San José", region:"Centro", status:"migracion", products:["labstats","smartlab"], url:"https://app.clickup.com/t/86bbzgfvq"},
+    {name:"Clínica Costanera", region:"Centro", status:"activo", products:["labstats","smartlab"], url:"https://app.clickup.com/t/86bbzgfwe"},
+    {name:"Hospital Curicó", region:"Centro", status:"activo", products:["smartlab","labstats"], url:"https://app.clickup.com/t/86bbzgfyn"},
+    {name:"Hospital Miraflores", region:"Centro", status:"implementacion", products:["labstats"], url:"https://app.clickup.com/t/86bbzgfz8"},
+    {name:"Cormun Rancagua", region:"Centro", status:"implementacion", products:["smartlab","labstats"], url:"https://app.clickup.com/t/86bbzgg1k"},
+    {name:"Cormun de Talca", region:"Centro", status:"implementacion", products:["labstats","smartlab"], url:"https://app.clickup.com/t/86bbzgg2e"},
+    {name:"Hospital Santa Cruz", region:"Centro", status:"implementacion", products:["labstats"], url:"https://app.clickup.com/t/86bbzgg9z"},
+    {name:"Norsalud", region:"Centro", status:"implementacion", products:["smartlab"], url:"https://app.clickup.com/t/86bbzggu1"},
+
+    {name:"Instituto de Neurocirugía", region:"Sur", status:"implementacion", products:["labstats"], url:"https://app.clickup.com/t/86bbzgfrh"},
+    {name:"Hospital Regional Temuco (HHA)", region:"Sur", status:"implementacion", products:["labstats"], url:"https://app.clickup.com/t/86bbzgfpv"},
+    {name:"Hospital Puerto Saavedra", region:"Sur", status:"implementacion", products:["labstats"], url:"https://app.clickup.com/t/86bbzgfnw"},
+    {name:"Hospital Nueva Imperial", region:"Sur", status:"implementacion", products:["labstats"], url:"https://app.clickup.com/t/86bbzgfkh"},
+    {name:"Hospital de Gorbea", region:"Sur", status:"implementacion", products:["labstats"], url:"https://app.clickup.com/t/86bbzgfjc"},
+    {name:"Hospital Lautaro", region:"Sur", status:"implementacion", products:["labstats"], url:"https://app.clickup.com/t/86bbzgfhj"},
+    {name:"Hospital de Vilcún", region:"Sur", status:"implementacion", products:["labstats"], url:"https://app.clickup.com/t/86bbzgfg2"},
+    {name:"Hospital de Pitrufquén", region:"Sur", status:"implementacion", products:["labstats"], url:"https://app.clickup.com/t/86bbzgfeh"},
+    {name:"Hospital de Toltén", region:"Sur", status:"implementacion", products:["labstats"], url:"https://app.clickup.com/t/86bbzgfdq"},
+    {name:"Hospital Padre Las Casas", region:"Sur", status:"implementacion", products:["labstats"], url:"https://app.clickup.com/t/86bbzgfda"},
+    {name:"Hospital Galvarino", region:"Sur", status:"implementacion", products:["labstats"], url:"https://app.clickup.com/t/86bbzgfcx"},
+    {name:"Hospital Cunco", region:"Sur", status:"implementacion", products:["labstats"], url:"https://app.clickup.com/t/86bbzgfca"},
+    {name:"Hospital de Carahue", region:"Sur", status:"implementacion", products:["labstats"], url:"https://app.clickup.com/t/86bbzgfbv"},
+    {name:"Hospital Loncoche", region:"Sur", status:"implementacion", products:["labstats"], url:"https://app.clickup.com/t/86bbzgfbc"},
+    {name:"Hospital de Villarrica", region:"Sur", status:"implementacion", products:["labstats"], url:"https://app.clickup.com/t/86bbzgfb1"},
+    {name:"Hospital Las Higueras", region:"Sur", status:"activo", products:["smartlab","consulta-web","recordlabs"], url:"https://app.clickup.com/t/86bbzgf33"},
+    {name:"SSASUR (Red)", region:"Sur", status:"activo", products:["smartlab"], url:"https://app.clickup.com/t/86bbzgf21"},
+    {name:"Hospital de Valdivia", region:"Sur", status:"implementacion", products:["labstats"], url:"https://app.clickup.com/t/86bbzggrg"},
+    {name:"Hospital de Lota", region:"Sur", status:"implementacion", products:["labstats","smartlab"], url:"https://app.clickup.com/t/86bbzggnm"},
+    {name:"Hospital Puerto Montt", region:"Sur", status:"implementacion", products:["labstats"], url:"https://app.clickup.com/t/86bbzggk5"},
+    {name:"Laboratorio Luis Pasteur", region:"Sur", status:"activo", products:["labstats","smartlab"], url:"https://app.clickup.com/t/86bbzggc1"},
+    {name:"Hospital Penco Lirquén", region:"Sur", status:"implementacion", products:["labstats"], url:"https://app.clickup.com/t/86bbzgg64"},
+    {name:"Hospital Ancud", region:"Sur", status:"migracion", products:["smartlab"], url:"https://app.clickup.com/t/86bbzgg45"},
+    {name:"DAS Concepción", region:"Sur", status:"implementacion", products:["labstats"], url:"https://app.clickup.com/t/86bbzgg38"},
+    {name:"DESAM Puerto Montt", region:"Sur", status:"implementacion", products:["labstats","smartlab"], url:"https://app.clickup.com/t/86bbzgg0e"},
+
+    {name:"Hospital Clínico de Magallanes", region:"Austral", status:"implementacion", products:["labstats"], url:"https://app.clickup.com/t/86bbzgfv2"},
+    {name:"Medilab Punta Arenas", region:"Austral", status:"implementacion", products:["labstats"], url:"https://app.clickup.com/t/86bbzggqb"},
+    {name:"Hospital Punta Arenas", region:"Austral", status:"implementacion", products:["labstats"], url:"https://app.clickup.com/t/86bbzgg50"},
+    {name:"Hospital Coyhaique", region:"Austral", status:"activo", products:["labstats","smartlab"], url:"https://app.clickup.com/t/86bbzggek"},
+  ];
+
+  const REGION_ORDER = ["Norte","Centro","Sur","Austral"];
+  const REGION_VAR = {Norte:"--norte", Centro:"--centro", Sur:"--sur", Austral:"--austral"};
+  const PRODUCT_LABEL = {smartlab:"SmartLab", labstats:"Labstats", recordlabs:"RecordLabs", "consulta-web":"Consulta Web"};
+  const STATUS_LABEL = {activo:"Activo", implementacion:"En implementación", migracion:"En migración"};
+
+  const state = {q:"", products:new Set()};
+
+  function renderTiles(){
+    const total = DATA.length;
+    const byStatus = {activo:0, implementacion:0, migracion:0};
+    const byProduct = {smartlab:0, labstats:0, recordlabs:0, "consulta-web":0};
+    DATA.forEach(h=>{
+      byStatus[h.status]++;
+      h.products.forEach(p=>byProduct[p]++);
+    });
+    const tiles = [
+      {n: total, l:"Hospitales", accent:true},
+      {n: byStatus.activo, l:"Activos"},
+      {n: byProduct.smartlab, l:"Con SmartLab"},
+      {n: byProduct.labstats, l:"Con Labstats"},
+      {n: byProduct.recordlabs, l:"Con RecordLabs"},
+      {n: byProduct["consulta-web"], l:"Con Consulta Web"},
+    ];
+    document.getElementById("tiles").innerHTML = tiles.map(t=>
+      `<div class="tile${t.accent?" accent":""}"><span class="n">${t.n}</span><span class="l">${t.l}</span></div>`
+    ).join("");
+  }
+
+  function renderFilters(){
+    const el = document.getElementById("product-filters");
+    el.innerHTML = Object.keys(PRODUCT_LABEL).map(p=>
+      `<button class="chip" data-product="${p}" aria-pressed="false"><span class="dot"></span>${PRODUCT_LABEL[p]}</button>`
+    ).join("");
+    el.querySelectorAll("button.chip").forEach(btn=>{
+      btn.addEventListener("click", ()=>{
+        const p = btn.dataset.product;
+        if(state.products.has(p)){ state.products.delete(p); btn.setAttribute("aria-pressed","false"); }
+        else { state.products.add(p); btn.setAttribute("aria-pressed","true"); }
+        renderRegions();
+      });
+    });
+  }
+
+  function matches(h){
+    if(state.q && !h.name.toLowerCase().includes(state.q)) return false;
+    if(state.products.size && ![...state.products].every(p=>h.products.includes(p))) return false;
+    return true;
+  }
+
+  function renderRegions(){
+    const el = document.getElementById("regions");
+    el.innerHTML = "";
+    REGION_ORDER.forEach(region=>{
+      const hospitals = DATA.filter(h=>h.region===region && matches(h));
+      const allInRegion = DATA.filter(h=>h.region===region);
+      if(!hospitals.length && (state.q || state.products.size)) return;
+
+      const section = document.createElement("section");
+      section.className = "region";
+      section.dataset.region = region;
+
+      const productCounts = {};
+      allInRegion.forEach(h=>h.products.forEach(p=>{productCounts[p]=(productCounts[p]||0)+1;}));
+      const miniStr = Object.entries(productCounts).map(([p,c])=>`${PRODUCT_LABEL[p].split(" ")[0]} ${c}`).join(" · ");
+
+      section.innerHTML = `
+        <div class="region-head">
+          <div class="bar" style="background:var(${REGION_VAR[region]})"></div>
+          <h2 style="color:var(${REGION_VAR[region]})">${region}</h2>
+          <span class="count">${hospitals.length}/${allInRegion.length}</span>
+          <span class="products-mini">${miniStr}</span>
+          <svg class="caret" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </div>
+        <div class="rows">
+          ${hospitals.length ? hospitals.map(h=>`
+            <div class="row">
+              <a class="hname" href="${h.url}" target="_blank" rel="noopener">${h.name}</a>
+              <div class="products">${h.products.map(p=>`<span class="badge ${p}">${PRODUCT_LABEL[p]}</span>`).join("")}</div>
+              <span class="status-pill ${h.status}">${STATUS_LABEL[h.status]}</span>
+            </div>
+          `).join("") : `<div class="empty">Sin resultados en esta región para el filtro actual.</div>`}
+        </div>
+      `;
+      section.querySelector(".region-head").addEventListener("click", ()=>{
+        section.classList.toggle("collapsed");
+      });
+      el.appendChild(section);
+    });
+  }
+
+  document.getElementById("q").addEventListener("input", (e)=>{
+    state.q = e.target.value.trim().toLowerCase();
+    renderRegions();
+  });
+
+  renderTiles();
+  renderFilters();
+  renderRegions();
+</script>
