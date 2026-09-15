@@ -200,6 +200,7 @@
     border-color:var(--ink);
   }
   button.chip .dot{width:7px;height:7px;border-radius:50%;background:currentColor;}
+  button.chip.integ-chip{border-style:dashed;}
 
   /* region section */
   .region{
@@ -267,6 +268,34 @@
   }
   .row .hname:hover{color:var(--accent-ink);text-decoration:underline;}
   .row .products{display:flex;flex-wrap:wrap;gap:5px;justify-self:start;}
+  .row{position:relative;}
+  .row-network{background:var(--surface-2);}
+  .row-network .hname{font-weight:800;}
+  .net-badge{
+    display:inline-block;
+    font-family:"IBM Plex Mono",monospace;
+    font-size:9.5px;
+    font-weight:700;
+    letter-spacing:.04em;
+    background:var(--sur);
+    color:#fff;
+    border-radius:4px;
+    padding:1.5px 5px;
+    margin-right:6px;
+    vertical-align:middle;
+  }
+  .net-count{font-weight:500;font-size:12px;color:var(--faint);}
+  .row-nested{padding-left:34px;}
+  .row-nested .hname{font-weight:500;font-size:13px;}
+  .net-connector{
+    position:absolute;
+    left:16px;
+    top:0;
+    bottom:0;
+    width:10px;
+    border-left:2px solid var(--line);
+  }
+  .row-nested:last-child .net-connector{bottom:50%;}
   .badge{
     font-family:"IBM Plex Mono",monospace;
     font-size:10.5px;
@@ -283,6 +312,24 @@
   .badge.labstats{background:var(--sur-soft);color:var(--sur);}
   .badge.recordlabs{background:var(--austral-soft);color:var(--austral);}
   .badge.consulta-web{background:var(--norte-soft);color:var(--norte);}
+  .badge.trakcare{background:var(--accent-soft);color:var(--accent-ink);}
+  .badge.rayen{background:var(--warn-soft);color:var(--warn);}
+  .badge.consulta-web-medicos{background:var(--norte-soft);color:var(--norte);}
+  .badge.consulta-web-pacientes{background:var(--norte-soft);color:var(--norte);}
+  .badge.epicenter{background:var(--sur-soft);color:var(--sur);}
+  .badge.yani{background:var(--austral-soft);color:var(--austral);}
+  .badge.his-mk{background:var(--centro-soft);color:var(--centro);}
+  .badge.medicap{background:var(--centro-soft);color:var(--centro);}
+  .badge.avis{background:var(--austral-soft);color:var(--austral);}
+  .badge.real{background:var(--sur-soft);color:var(--sur);}
+  .badge.infinity{background:var(--norte-soft);color:var(--norte);}
+  .badge.rce-ssasur{background:var(--centro-soft);color:var(--centro);}
+  .badge.legacy{background:var(--surface-2);color:var(--faint);}
+  .badge.integ{border:1px dashed currentColor;}
+  .legend{display:flex;flex-wrap:wrap;gap:14px;font-size:11.5px;color:var(--muted);align-items:center;}
+  .legend .item{display:flex;align-items:center;gap:5px;}
+  .legend .swatch{width:12px;height:12px;border-radius:4px;background:var(--surface-2);border:1px solid var(--line);}
+  .legend .swatch.integ{border:1px dashed var(--faint);background:transparent;}
 
   .status-pill{
     font-size:11.5px;
@@ -317,7 +364,11 @@
   <header class="top">
     <span class="eyebrow">Instalaciones &middot; Red de laboratorios clínicos</span>
     <h1>Cobertura de productos por hospital</h1>
-    <p class="sub">Estado de despliegue de SmartLab, Labstats, RecordLabs y Consulta Web en la red de hospitales, agrupado por región. Datos reflejan el último estado de la lista "Productos Instalados".</p>
+    <p class="sub">Estado de despliegue de productos M&D e integraciones de terceros en la red de hospitales, agrupado por región. Datos reflejan el último estado de la lista "Productos Instalados".</p>
+    <div class="legend">
+      <span class="item"><span class="swatch"></span>Producto M&amp;D</span>
+      <span class="item"><span class="swatch integ"></span>Integración de terceros (AVIS, REAL, Epicenter, Medicap, HIS MK, YANI, Rayen, TrakCare)</span>
+    </div>
   </header>
 
   <div class="tiles" id="tiles"></div>
@@ -332,69 +383,72 @@
 
   <div id="regions"></div>
 
-  <footer>Panel generado a partir de la lista ClickUp "Productos Instalados (Pruebas Victor)" · 50 hospitales</footer>
+  <footer>Panel generado a partir de la lista ClickUp "Productos Instalados (Pruebas Victor)" · 51 hospitales</footer>
 </div>
 
 <script>
   const DATA = [
-    {name:"Hospital Alto Hospicio", region:"Norte", status:"activo", products:["smartlab","labstats","consulta-web"], url:"https://app.clickup.com/t/86bbzgf3u"},
-    {name:"Hospital Iquique HETG", region:"Norte", status:"activo", products:["labstats","consulta-web","smartlab"], url:"https://app.clickup.com/t/86bbzgf4w"},
-    {name:"Hospital Marcos Macuada (Tocopilla)", region:"Norte", status:"implementacion", products:["labstats"], url:"https://app.clickup.com/t/86bbzgfxf"},
-    {name:"Hospital Juan Noé (Arica)", region:"Norte", status:"implementacion", products:["labstats"], url:"https://app.clickup.com/t/86bbzgg02"},
-    {name:"CON Antofagasta", region:"Norte", status:"implementacion", products:["labstats"], url:"https://app.clickup.com/t/86bbzgg0w"},
-    {name:"Sermus Arica", region:"Norte", status:"implementacion", products:["labstats"], url:"https://app.clickup.com/t/86bbzgg6w"},
+    {name:"Hospital Alto Hospicio", region:"Norte", status:"activo", products:["smartlab","labstats","consulta-web-medicos","consulta-web-pacientes"], url:"https://app.clickup.com/t/86bbzgf3u"},
+    {name:"Hospital Iquique HETG", region:"Norte", status:"activo", products:["labstats","consulta-web-medicos","smartlab","epicenter","yani"], url:"https://app.clickup.com/t/86bbzgf4w"},
+    {name:"Hospital Marcos Macuada (Tocopilla)", region:"Norte", status:"implementacion", products:["labstats","rayen"], url:"https://app.clickup.com/t/86bbzgfxf"},
+    {name:"Hospital Juan Noé (Arica)", region:"Norte", status:"implementacion", products:["labstats","legacy"], url:"https://app.clickup.com/t/86bbzgg02"},
+    {name:"CON Antofagasta", region:"Norte", status:"activo", products:["labstats"], url:"https://app.clickup.com/t/86bbzgg0w"},
+    {name:"Sermus Arica", region:"Norte", status:"activo", products:["labstats","avis"], url:"https://app.clickup.com/t/86bbzgg6w"},
     {name:"Hospital La Serena", region:"Norte", status:"activo", products:["labstats","smartlab"], url:"https://app.clickup.com/t/86bbzgggy"},
     {name:"Hospital de Copiapó", region:"Norte", status:"implementacion", products:["labstats"], url:"https://app.clickup.com/t/86bbzggut"},
 
-    {name:"Hospital El Carmen de Maipú", region:"Centro", status:"activo", products:["labstats","smartlab","consulta-web"], url:"https://app.clickup.com/t/86bbzgf2p"},
-    {name:"Hospital San Francisco (SS Aconcagua)", region:"Centro", status:"implementacion", products:["labstats"], url:"https://app.clickup.com/t/86bbzgf69"},
-    {name:"Hospital San Camilo (SS Aconcagua)", region:"Centro", status:"implementacion", products:["labstats"], url:"https://app.clickup.com/t/86bbzgf79"},
-    {name:"Hospital San Juan (SS Aconcagua)", region:"Centro", status:"implementacion", products:["labstats"], url:"https://app.clickup.com/t/86bbzgf8q"},
-    {name:"CESFAM San Felipe (SS Aconcagua)", region:"Centro", status:"implementacion", products:["labstats"], url:"https://app.clickup.com/t/86bbzgf9k"},
-    {name:"Hospital San José", region:"Centro", status:"migracion", products:["labstats","smartlab"], url:"https://app.clickup.com/t/86bbzgfvq"},
-    {name:"Clínica Costanera", region:"Centro", status:"activo", products:["labstats","smartlab"], url:"https://app.clickup.com/t/86bbzgfwe"},
+    {name:"Hospital El Carmen de Maipú", region:"Centro", status:"activo", products:["labstats","smartlab","consulta-web-medicos","consulta-web-pacientes","real"], url:"https://app.clickup.com/t/86bbzgf2p"},
+    {name:"Hospital San Francisco (SS Aconcagua)", region:"Centro", status:"implementacion", products:["labstats","legacy"], url:"https://app.clickup.com/t/86bbzgf69"},
+    {name:"Hospital San Camilo (SS Aconcagua)", region:"Centro", status:"activo", products:["labstats","legacy"], url:"https://app.clickup.com/t/86bbzgf79"},
+    {name:"Hospital San Juan (SS Aconcagua)", region:"Centro", status:"implementacion", products:["labstats","legacy"], url:"https://app.clickup.com/t/86bbzgf8q"},
+    {name:"CESFAM San Felipe (SS Aconcagua)", region:"Centro", status:"activo", products:["labstats","legacy"], url:"https://app.clickup.com/t/86bbzgf9k"},
+    {name:"Hospital San José", region:"Centro", status:"migracion", products:["labstats","smartlab","legacy"], url:"https://app.clickup.com/t/86bbzgfvq"},
+    {name:"Clínica Costanera", region:"Centro", status:"activo", products:["labstats","smartlab","his-mk","medicap"], url:"https://app.clickup.com/t/86bbzgfwe"},
     {name:"Hospital Curicó", region:"Centro", status:"activo", products:["smartlab","labstats"], url:"https://app.clickup.com/t/86bbzgfyn"},
     {name:"Hospital Miraflores", region:"Centro", status:"implementacion", products:["labstats"], url:"https://app.clickup.com/t/86bbzgfz8"},
-    {name:"Cormun Rancagua", region:"Centro", status:"implementacion", products:["smartlab","labstats"], url:"https://app.clickup.com/t/86bbzgg1k"},
+    {name:"Cormun Rancagua", region:"Centro", status:"implementacion", products:["smartlab","labstats","avis"], url:"https://app.clickup.com/t/86bbzgg1k"},
     {name:"Cormun de Talca", region:"Centro", status:"implementacion", products:["labstats","smartlab"], url:"https://app.clickup.com/t/86bbzgg2e"},
     {name:"Hospital Santa Cruz", region:"Centro", status:"implementacion", products:["labstats"], url:"https://app.clickup.com/t/86bbzgg9z"},
     {name:"Norsalud", region:"Centro", status:"implementacion", products:["smartlab"], url:"https://app.clickup.com/t/86bbzggu1"},
 
-    {name:"Instituto de Neurocirugía", region:"Sur", status:"implementacion", products:["labstats"], url:"https://app.clickup.com/t/86bbzgfrh"},
-    {name:"Hospital Regional Temuco (HHA)", region:"Sur", status:"implementacion", products:["labstats"], url:"https://app.clickup.com/t/86bbzgfpv"},
-    {name:"Hospital Puerto Saavedra", region:"Sur", status:"implementacion", products:["labstats"], url:"https://app.clickup.com/t/86bbzgfnw"},
-    {name:"Hospital Nueva Imperial", region:"Sur", status:"implementacion", products:["labstats"], url:"https://app.clickup.com/t/86bbzgfkh"},
-    {name:"Hospital de Gorbea", region:"Sur", status:"implementacion", products:["labstats"], url:"https://app.clickup.com/t/86bbzgfjc"},
-    {name:"Hospital Lautaro", region:"Sur", status:"implementacion", products:["labstats"], url:"https://app.clickup.com/t/86bbzgfhj"},
-    {name:"Hospital de Vilcún", region:"Sur", status:"implementacion", products:["labstats"], url:"https://app.clickup.com/t/86bbzgfg2"},
-    {name:"Hospital de Pitrufquén", region:"Sur", status:"implementacion", products:["labstats"], url:"https://app.clickup.com/t/86bbzgfeh"},
-    {name:"Hospital de Toltén", region:"Sur", status:"implementacion", products:["labstats"], url:"https://app.clickup.com/t/86bbzgfdq"},
-    {name:"Hospital Padre Las Casas", region:"Sur", status:"implementacion", products:["labstats"], url:"https://app.clickup.com/t/86bbzgfda"},
-    {name:"Hospital Galvarino", region:"Sur", status:"implementacion", products:["labstats"], url:"https://app.clickup.com/t/86bbzgfcx"},
-    {name:"Hospital Cunco", region:"Sur", status:"implementacion", products:["labstats"], url:"https://app.clickup.com/t/86bbzgfca"},
-    {name:"Hospital de Carahue", region:"Sur", status:"implementacion", products:["labstats"], url:"https://app.clickup.com/t/86bbzgfbv"},
-    {name:"Hospital Loncoche", region:"Sur", status:"implementacion", products:["labstats"], url:"https://app.clickup.com/t/86bbzgfbc"},
-    {name:"Hospital de Villarrica", region:"Sur", status:"implementacion", products:["labstats"], url:"https://app.clickup.com/t/86bbzgfb1"},
-    {name:"Hospital Las Higueras", region:"Sur", status:"activo", products:["smartlab","consulta-web","recordlabs"], url:"https://app.clickup.com/t/86bbzgf33"},
-    {name:"SSASUR (Red)", region:"Sur", status:"activo", products:["smartlab"], url:"https://app.clickup.com/t/86bbzgf21"},
-    {name:"Hospital de Valdivia", region:"Sur", status:"implementacion", products:["labstats"], url:"https://app.clickup.com/t/86bbzggrg"},
+    {name:"Instituto de Neurocirugía", region:"Sur", status:"implementacion", products:["labstats","legacy"], url:"https://app.clickup.com/t/86bbzgfrh"},
+    {name:"SSASUR (Red)", region:"Sur", status:"activo", products:["smartlab","rce-ssasur"], url:"https://app.clickup.com/t/86bbzgf21", isNetwork:true, netSize:14},
+    {name:"Hospital Regional Temuco (HHA)", region:"Sur", status:"activo", products:["labstats","rce-ssasur"], url:"https://app.clickup.com/t/86bc0x1t1", net:"SSASUR"},
+    {name:"Hospital Puerto Saavedra", region:"Sur", status:"activo", products:["labstats","rce-ssasur"], url:"https://app.clickup.com/t/86bc0x1u6", net:"SSASUR"},
+    {name:"Hospital Nueva Imperial", region:"Sur", status:"activo", products:["labstats","rce-ssasur"], url:"https://app.clickup.com/t/86bc0x1w3", net:"SSASUR"},
+    {name:"Hospital de Gorbea", region:"Sur", status:"activo", products:["labstats","rce-ssasur","legacy"], url:"https://app.clickup.com/t/86bc0x1z4", net:"SSASUR"},
+    {name:"Hospital Lautaro", region:"Sur", status:"activo", products:["labstats","rce-ssasur","legacy"], url:"https://app.clickup.com/t/86bc0x1ze", net:"SSASUR"},
+    {name:"Hospital de Vilcún", region:"Sur", status:"activo", products:["labstats","rce-ssasur"], url:"https://app.clickup.com/t/86bc0x22j", net:"SSASUR"},
+    {name:"Hospital de Pitrufquén", region:"Sur", status:"activo", products:["labstats","rce-ssasur","legacy"], url:"https://app.clickup.com/t/86bc0x25k", net:"SSASUR"},
+    {name:"Hospital de Toltén", region:"Sur", status:"activo", products:["labstats","rce-ssasur"], url:"https://app.clickup.com/t/86bc0x2ba", net:"SSASUR"},
+    {name:"Hospital Padre Las Casas", region:"Sur", status:"activo", products:["labstats","rce-ssasur"], url:"https://app.clickup.com/t/86bc0x2dn", net:"SSASUR"},
+    {name:"Hospital Galvarino", region:"Sur", status:"activo", products:["labstats","rce-ssasur","legacy"], url:"https://app.clickup.com/t/86bc0x2fc", net:"SSASUR"},
+    {name:"Hospital Cunco", region:"Sur", status:"activo", products:["labstats","rce-ssasur"], url:"https://app.clickup.com/t/86bc0x2j5", net:"SSASUR"},
+    {name:"Hospital de Carahue", region:"Sur", status:"activo", products:["labstats","rce-ssasur"], url:"https://app.clickup.com/t/86bc0x2m5", net:"SSASUR"},
+    {name:"Hospital Loncoche", region:"Sur", status:"activo", products:["labstats","rce-ssasur"], url:"https://app.clickup.com/t/86bc0x2q0", net:"SSASUR"},
+    {name:"Hospital de Villarrica", region:"Sur", status:"activo", products:["labstats","rce-ssasur"], url:"https://app.clickup.com/t/86bc0x2r9", net:"SSASUR"},
+    {name:"Hospital Las Higueras", region:"Sur", status:"activo", products:["smartlab","consulta-web-pacientes","recordlabs","trakcare","real"], url:"https://app.clickup.com/t/86bbzgf33"},
+    {name:"Hospital de Valdivia", region:"Sur", status:"activo", products:["labstats"], url:"https://app.clickup.com/t/86bbzggrg"},
     {name:"Hospital de Lota", region:"Sur", status:"implementacion", products:["labstats","smartlab"], url:"https://app.clickup.com/t/86bbzggnm"},
-    {name:"Hospital Puerto Montt", region:"Sur", status:"implementacion", products:["labstats"], url:"https://app.clickup.com/t/86bbzggk5"},
+    {name:"Hospital Puerto Montt", region:"Sur", status:"activo", products:["labstats"], url:"https://app.clickup.com/t/86bbzggk5"},
     {name:"Laboratorio Luis Pasteur", region:"Sur", status:"activo", products:["labstats","smartlab"], url:"https://app.clickup.com/t/86bbzggc1"},
     {name:"Hospital Penco Lirquén", region:"Sur", status:"implementacion", products:["labstats"], url:"https://app.clickup.com/t/86bbzgg64"},
     {name:"Hospital Ancud", region:"Sur", status:"migracion", products:["smartlab"], url:"https://app.clickup.com/t/86bbzgg45"},
-    {name:"DAS Concepción", region:"Sur", status:"implementacion", products:["labstats"], url:"https://app.clickup.com/t/86bbzgg38"},
-    {name:"DESAM Puerto Montt", region:"Sur", status:"implementacion", products:["labstats","smartlab"], url:"https://app.clickup.com/t/86bbzgg0e"},
+    {name:"DAS Concepción", region:"Sur", status:"activo", products:["labstats"], url:"https://app.clickup.com/t/86bbzgg38"},
+    {name:"DESAM Puerto Montt", region:"Sur", status:"implementacion", products:["labstats","smartlab","rayen"], url:"https://app.clickup.com/t/86bbzgg0e"},
+    {name:"Laboratorio Diagnóstika", region:"Sur", status:"activo", products:["smartlab"], url:"https://app.clickup.com/t/86bc0mu42"},
 
-    {name:"Hospital Clínico de Magallanes", region:"Austral", status:"implementacion", products:["labstats"], url:"https://app.clickup.com/t/86bbzgfv2"},
+    {name:"Hospital Clínico de Magallanes", region:"Austral", status:"implementacion", products:["labstats","legacy"], url:"https://app.clickup.com/t/86bbzgfv2"},
     {name:"Medilab Punta Arenas", region:"Austral", status:"implementacion", products:["labstats"], url:"https://app.clickup.com/t/86bbzggqb"},
     {name:"Hospital Punta Arenas", region:"Austral", status:"implementacion", products:["labstats"], url:"https://app.clickup.com/t/86bbzgg50"},
-    {name:"Hospital Coyhaique", region:"Austral", status:"activo", products:["labstats","smartlab"], url:"https://app.clickup.com/t/86bbzggek"},
+    {name:"Hospital Coyhaique", region:"Austral", status:"activo", products:["labstats","smartlab","real","legacy"], url:"https://app.clickup.com/t/86bbzggek"},
   ];
 
   const REGION_ORDER = ["Norte","Centro","Sur","Austral"];
   const REGION_VAR = {Norte:"--norte", Centro:"--centro", Sur:"--sur", Austral:"--austral"};
-  const PRODUCT_LABEL = {smartlab:"SmartLab", labstats:"Labstats", recordlabs:"RecordLabs", "consulta-web":"Consulta Web"};
+  const PRODUCT_LABEL = {smartlab:"SmartLab", labstats:"Labstats", recordlabs:"RecordLabs", "consulta-web-medicos":"Consulta Web Médicos", "consulta-web-pacientes":"Consulta Web Pacientes", legacy:"Legacy (Estadística Legacy)", trakcare:"TrakCare", rayen:"Rayen", epicenter:"Epicenter", yani:"YANI", "his-mk":"HIS MK", medicap:"Medicap", avis:"AVIS", real:"REAL", "rce-ssasur":"RCE SSASUR"};
+  const INTEGRATIONS = new Set(["trakcare","rayen","epicenter","yani","his-mk","medicap","avis","real","rce-ssasur"]);
+  const CORE_PRODUCTS = new Set(["smartlab","labstats","recordlabs","consulta-web-medicos","consulta-web-pacientes"]);
   const STATUS_LABEL = {activo:"Activo", implementacion:"En implementación", migracion:"En migración"};
 
   const state = {q:"", products:new Set()};
@@ -402,18 +456,21 @@
   function renderTiles(){
     const total = DATA.length;
     const byStatus = {activo:0, implementacion:0, migracion:0};
-    const byProduct = {smartlab:0, labstats:0, recordlabs:0, "consulta-web":0};
+    const byProduct = {};
+    Object.keys(PRODUCT_LABEL).forEach(p=>byProduct[p]=0);
     DATA.forEach(h=>{
       byStatus[h.status]++;
       h.products.forEach(p=>byProduct[p]++);
     });
+    const withIntegration = DATA.filter(h=>h.products.some(p=>!CORE_PRODUCTS.has(p))).length;
     const tiles = [
       {n: total, l:"Hospitales", accent:true},
       {n: byStatus.activo, l:"Activos"},
       {n: byProduct.smartlab, l:"Con SmartLab"},
       {n: byProduct.labstats, l:"Con Labstats"},
       {n: byProduct.recordlabs, l:"Con RecordLabs"},
-      {n: byProduct["consulta-web"], l:"Con Consulta Web"},
+      {n: byProduct["consulta-web-medicos"]+byProduct["consulta-web-pacientes"], l:"Con Consulta Web"},
+      {n: withIntegration, l:"Con integraciones/Legacy"},
     ];
     document.getElementById("tiles").innerHTML = tiles.map(t=>
       `<div class="tile${t.accent?" accent":""}"><span class="n">${t.n}</span><span class="l">${t.l}</span></div>`
@@ -423,7 +480,7 @@
   function renderFilters(){
     const el = document.getElementById("product-filters");
     el.innerHTML = Object.keys(PRODUCT_LABEL).map(p=>
-      `<button class="chip" data-product="${p}" aria-pressed="false"><span class="dot"></span>${PRODUCT_LABEL[p]}</button>`
+      `<button class="chip${INTEGRATIONS.has(p)?" integ-chip":""}" data-product="${p}" aria-pressed="false"><span class="dot"></span>${PRODUCT_LABEL[p]}</button>`
     ).join("");
     el.querySelectorAll("button.chip").forEach(btn=>{
       btn.addEventListener("click", ()=>{
@@ -467,9 +524,10 @@
         </div>
         <div class="rows">
           ${hospitals.length ? hospitals.map(h=>`
-            <div class="row">
-              <a class="hname" href="${h.url}" target="_blank" rel="noopener">${h.name}</a>
-              <div class="products">${h.products.map(p=>`<span class="badge ${p}">${PRODUCT_LABEL[p]}</span>`).join("")}</div>
+            <div class="row${h.net?" row-nested":""}${h.isNetwork?" row-network":""}">
+              ${h.net?`<span class="net-connector"></span>`:""}
+              <a class="hname" href="${h.url}" target="_blank" rel="noopener">${h.isNetwork?`<span class="net-badge">RED</span>`:""}${h.name}${h.isNetwork&&h.netSize?` <span class="net-count">(${h.netSize} hospitales)</span>`:""}</a>
+              <div class="products">${h.products.map(p=>`<span class="badge ${p}${INTEGRATIONS.has(p)?" integ":""}">${PRODUCT_LABEL[p]}</span>`).join("")}</div>
               <span class="status-pill ${h.status}">${STATUS_LABEL[h.status]}</span>
             </div>
           `).join("") : `<div class="empty">Sin resultados en esta región para el filtro actual.</div>`}
